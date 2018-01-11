@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="18dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bytasaur.adbnocableroot.MainActivity">
+
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/state"
+            android:onClick="setStatus"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textAlignment="center"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:src="@android:drawable/ic_popup_sync"
+            android:onClick="setStatus"
+            android:background="@android:color/transparent"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <Button
+        android:text="Enable ADB over WiFi"
+        android:onClick="enable"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:text="Disable ADB over WiFi"
+        android:onClick="disable"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/ip"
+            android:onClick="setIp"
+            android:textAlignment="center"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:src="@android:drawable/ic_popup_sync"
+            android:onClick="setIp"
+            android:background="@android:color/transparent"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</LinearLayout>
