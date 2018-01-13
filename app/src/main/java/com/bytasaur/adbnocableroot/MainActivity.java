@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void enable(View v) {
         setProperty("setprop service.adb.tcp.port 5555\n");
+        // Can send integer port instead but sending complete string for performance
         setIp(null);
     }
 
