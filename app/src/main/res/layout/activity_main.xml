@@ -53,6 +53,14 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/port"
+            android:onClick="setIp"
+            android:textAlignment="center"
+            android:layout_toEndOf="@id/ip"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
         <ImageButton
             android:src="@android:drawable/ic_popup_sync"
             android:onClick="setIp"

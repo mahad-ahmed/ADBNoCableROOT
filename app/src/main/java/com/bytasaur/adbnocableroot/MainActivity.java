@@ -13,11 +13,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity { // TODO: Allow configuration of port
     private Runtime runtime;
     private TextView status;
     private TextView ip_text;
+    private TextView port_text;
     private WifiManager wifiManager;
+    static int PORT = 5555;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         runtime = Runtime.getRuntime();
         status = findViewById(R.id.state);
         ip_text = findViewById(R.id.ip);
+        port_text = findViewById(R.id.port);
     }
 
     @Override
@@ -44,15 +47,23 @@ public class MainActivity extends AppCompatActivity {
             InputStream inputStream = getprop.getInputStream();
             byte buff[] = new byte[8];
             int s = inputStream.read(buff);
-            if(new String(buff, 0, s-1).equals("5555")) {
+            int port = Integer.parseInt(new String(buff, 0, s-1));
+            if(port>0) {
                 status.setText("Enabled");
             }
             else {
                 status.setText("Disabled");
             }
+            port_text.setText(" : "+port);
             getprop.waitFor();
         }
-        catch(Exception ignored) {}
+        catch(Exception ex) {
+            if(ex.getClass() == NumberFormatException.class) {
+                status.setText("Unknown");
+                port_text.setText(" : NaN");
+            }
+            ex.printStackTrace();
+        }
     }
 
     public void setIp(View v) {
@@ -66,22 +77,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void enable(View v) {
-        setProperty("setprop service.adb.tcp.port 5555\n");
-        // Can send integer port instead but sending complete string for performance
+        setProperty(PORT);
         setIp(null);
     }
 
     public void disable(View v) {
-        setProperty("setprop service.adb.tcp.port -1\n");
+        setProperty(-1);
     }
 
-    void setProperty(String cmd) {  // int??
+    void setProperty(int port) {
         Process su = null;
         DataOutputStream outputStream = null;
         try {
             su = runtime.exec("su");
             outputStream = new DataOutputStream(su.getOutputStream());
-            outputStream.writeBytes(cmd);
+            outputStream.writeBytes("setprop service.adb.tcp.port "+port+"\n");
             outputStream.flush();
 
             outputStream.writeBytes("stop adbd\n");
