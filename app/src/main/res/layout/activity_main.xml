@@ -8,20 +8,19 @@
     tools:context="com.bytasaur.adbnocableroot.MainActivity">
 
     <RelativeLayout
+        android:onClick="setStatus"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/state"
-            android:onClick="setStatus"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textAlignment="center"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <ImageButton
+        <ImageView
             android:src="@drawable/ic_popup_sync_1"
-            android:onClick="setStatus"
             android:background="@android:color/transparent"
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
@@ -43,27 +42,28 @@
         android:layout_height="wrap_content" />
 
     <RelativeLayout
+        android:onClick="setIp"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/ip"
-            android:onClick="setIp"
-            android:textAlignment="center"
+        <RelativeLayout
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/port"
-            android:onClick="setIp"
-            android:textAlignment="center"
-            android:layout_toEndOf="@id/ip"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <ImageButton
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/ip"
+                android:textAlignment="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/port"
+                android:textAlignment="center"
+                android:layout_toEndOf="@id/ip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <ImageView
             android:src="@drawable/ic_popup_sync_1"
-            android:onClick="setIp"
             android:background="@android:color/transparent"
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
