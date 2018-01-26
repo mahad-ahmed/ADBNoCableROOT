@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     PORT = port;
                     menuPortItem.setTitle(PORT+"");
                     alertDialog.dismiss();
+                    setProperty(PORT);
                 }
                 else {
                     editText.setError("* Invalid port number");
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 PORT = 5555;
                 menuPortItem.setTitle("5555");
                 alertDialog.dismiss();
+                setProperty(PORT);
             }
         });
         return super.onOptionsItemSelected(item);
