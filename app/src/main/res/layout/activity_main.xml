@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="RelativeOverlap, HardcodedText"
     android:orientation="vertical"
     android:padding="22dp"
     android:layout_width="match_parent"
@@ -9,7 +10,7 @@
 
     <RelativeLayout
         android:onClick="setStatus"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -20,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <ImageView
+            android:contentDescription="Refresh state"
             android:src="@drawable/ic_popup_sync_1"
             android:background="@android:color/transparent"
             android:layout_alignParentEnd="true"
@@ -43,7 +45,7 @@
 
     <RelativeLayout
         android:onClick="setIp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
@@ -63,6 +65,7 @@
                 android:layout_height="wrap_content" />
         </RelativeLayout>
         <ImageView
+            android:contentDescription="Refresh IP"
             android:src="@drawable/ic_popup_sync_1"
             android:background="@android:color/transparent"
             android:layout_alignParentEnd="true"
