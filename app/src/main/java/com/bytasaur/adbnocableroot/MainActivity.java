@@ -166,10 +166,10 @@ public class MainActivity extends AppCompatActivity {
             setStatus(null);
         }
         catch(Exception ex) {
-            if(su == null && ex.getClass().equals(IOException.class)) {
+            if(ex.getClass().equals(IOException.class)) {
                 Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
             }
-            else if(su!=null) {
+            if(su!=null) {
                 su.destroy();
             }
             if(outputStream!=null) {

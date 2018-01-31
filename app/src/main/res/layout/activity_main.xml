@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="18dp"
+    android:padding="22dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.bytasaur.adbnocableroot.MainActivity">
 
     <RelativeLayout
         android:onClick="setStatus"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -32,18 +32,18 @@
         android:onClick="enable"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="52dp" />
 
     <Button
         android:text="Disable ADB over WiFi"
         android:onClick="disable"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="52dp" />
 
     <RelativeLayout
         android:onClick="setIp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
