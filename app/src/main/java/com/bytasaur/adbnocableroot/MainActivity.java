@@ -73,11 +73,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 int port = Integer.parseInt(str);
                 if(port>0) {
-                    getPreferences(0).edit().putInt("port", port).apply();
-                    PORT = port;
-                    menuPortItem.setTitle(PORT+"");
+                    if(setProperty(port)) {
+                        getPreferences(0).edit().putInt("port", port).apply();
+                        PORT = port;
+                        menuPortItem.setTitle(PORT + "");
+                    }
                     alertDialog.dismiss();
-                    setProperty(PORT);
                 }
                 else {
                     editText.setError("* Invalid port number");
@@ -87,11 +88,12 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getPreferences(0).edit().putInt("port", 5555).apply();
-                PORT = 5555;
-                menuPortItem.setTitle("5555");
+                if(setProperty(5555)) {
+                    getPreferences(0).edit().putInt("port", 5555).apply();
+                    PORT = 5555;
+                    menuPortItem.setTitle("5555");
+                }
                 alertDialog.dismiss();
-                setProperty(PORT);
             }
         });
         return super.onOptionsItemSelected(item);
@@ -142,8 +144,9 @@ public class MainActivity extends AppCompatActivity {
         setProperty(-1);
     }
 
-    void setProperty(int port) {
+    boolean setProperty(int port) {
         Process su = null;
+        boolean r = false;
         DataOutputStream outputStream = null;
         try {
             su = runtime.exec("su");
@@ -160,15 +163,16 @@ public class MainActivity extends AppCompatActivity {
             outputStream.writeBytes("exit\n");
             outputStream.flush();
 
-            su.waitFor();
+            r = su.waitFor()==0;
             outputStream.close();
 
             setStatus(null);
         }
         catch(Exception ex) {
-            if(su==null || ex.getClass().equals(IOException.class)) {
-                Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
-            }
+//            if(su==null || ex.getClass().equals(IOException.class)) {
+//                Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+//            }
+            ex.printStackTrace();
             if(su!=null) {
                 su.destroy();
             }
@@ -179,5 +183,9 @@ public class MainActivity extends AppCompatActivity {
                 catch (IOException ignored) {}
             }
         }
+        if(!r) {
+            Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+        }
+        return r;
     }
 }
