@@ -22,6 +22,7 @@ import java.io.InputStream;
 //TODO: Add quick setting button in notification bar
 //TODO: Add widget
 //TODO: Add always-on notification
+//TODO: Consider adding a timeout on waitFor's
 
 public class MainActivity extends AppCompatActivity {
     private Runtime runtime;
@@ -48,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setStatus(null);
-        setIp(null);
+        refresh(null);
     }
 
     @Override
@@ -103,8 +103,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void refresh(View v) {
+        setStatus();
+        setIp();
+    }
+
     @SuppressLint("SetTextI18n")
-    public void setStatus(View v) {
+    public void setStatus() {
         try {
             Process getprop = runtime.exec("getprop service.adb.tcp.port");
             InputStream inputStream = getprop.getInputStream();
@@ -129,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setIp(View v) {
+    public void setIp() {
         int ip = wifiManager.getConnectionInfo().getIpAddress();
         if(ip==0) {
             ip_text.setText("N/A");
@@ -141,11 +146,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void enable(View v) {
         setProperty(PORT);
-        setIp(null);
+        refresh(null);
     }
 
     public void disable(View v) {
         setProperty(-1);
+        refresh(null);
     }
 
     boolean setProperty(int port) {
@@ -169,8 +175,6 @@ public class MainActivity extends AppCompatActivity {
 
             r = su.waitFor()==0;
             outputStream.close();
-
-            setStatus(null);
         }
         catch(Exception ex) {
 //            if(su==null || ex.getClass().equals(IOException.class)) {

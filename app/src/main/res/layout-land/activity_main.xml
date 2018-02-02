@@ -9,7 +9,7 @@
     tools:context="com.bytasaur.adbnocableroot.MainActivity">
 
     <RelativeLayout
-        android:onClick="setStatus"
+        android:onClick="refresh"
         android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -44,7 +44,7 @@
         android:layout_height="52dp" />
 
     <RelativeLayout
-        android:onClick="setIp"
+        android:onClick="refresh"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
