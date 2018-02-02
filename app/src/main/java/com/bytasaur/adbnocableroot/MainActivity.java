@@ -75,12 +75,17 @@ public class MainActivity extends AppCompatActivity {
                     editText.setError("* Required");
                     return;
                 }
-                int port = Integer.parseInt(str);
-                if(port>0) {
+                int port = 0;
+                try {
+                    port = Integer.parseInt(str);
+                }
+                catch(NumberFormatException ignored) {}
+                if(port>0 && port<65536) {
                     if(setProperty(port)) {
                         getPreferences(0).edit().putInt("port", port).apply();
                         PORT = port;
                         menuPortItem.setTitle(PORT + "");
+                        refresh(null);
                     }
                     alertDialog.dismiss();
                 }
@@ -96,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     getPreferences(0).edit().putInt("port", 5555).apply();
                     PORT = 5555;
                     menuPortItem.setTitle("5555");
+                    refresh(null);
                 }
                 alertDialog.dismiss();
             }
@@ -145,11 +151,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void enable(View v) {
+//        if(setProperty(PORT)) {
+//            refresh(null);
+//        }
         setProperty(PORT);
         refresh(null);
     }
 
     public void disable(View v) {
+//        if(setProperty(-1)) {
+//            refresh(null);
+//        }
         setProperty(-1);
         refresh(null);
     }
