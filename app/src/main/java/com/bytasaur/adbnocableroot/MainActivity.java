@@ -19,6 +19,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+//TODO: Add quick setting button in notification bar
+//TODO: Add widget
+//TODO: Add always-on notification
+
 public class MainActivity extends AppCompatActivity {
     private Runtime runtime;
     private TextView status;
