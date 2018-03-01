@@ -110,17 +110,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void refresh(View v) {
-        setStatus();
-        setIp();
+        refreshStatus();
+        refreshIp();
     }
 
     @SuppressLint("SetTextI18n")
-    public void setStatus() {
+    public void refreshStatus() {
         try {
             Process getprop = runtime.exec("getprop service.adb.tcp.port");
             InputStream inputStream = getprop.getInputStream();
             byte buff[] = new byte[8];
             int s = inputStream.read(buff);
+            if(s==-1) {
+                return;
+            }
             int port = Integer.parseInt(new String(buff, 0, s-1));
             if(port>0) {
                 status.setText("Enabled");
@@ -140,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setIp() {
+    public void refreshIp() {
         int ip = wifiManager.getConnectionInfo().getIpAddress();
         if(ip==0) {
             ip_text.setText("N/A");
