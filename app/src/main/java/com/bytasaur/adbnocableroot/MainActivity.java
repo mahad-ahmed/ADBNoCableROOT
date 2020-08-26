@@ -1,10 +1,12 @@
 package com.bytasaur.adbnocableroot;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.os.PowerManager;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.format.Formatter;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView port_text;
     private MenuItem menuPortItem;
     private WifiManager wifiManager;
+    private PowerManager.WakeLock wakeLock = null;
     static int PORT;
 
     @Override
@@ -52,61 +55,80 @@ public class MainActivity extends AppCompatActivity {
         refresh(null);
     }
 
+    //  TODO: This is only called once. Fix!
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         menuPortItem = menu.getItem(0);
         menuPortItem.setTitle(PORT+"");
+        Toast.makeText(this, (wakeLock == null)+"", Toast.LENGTH_SHORT).show();
+        if(wakeLock != null) {
+            menuPortItem = menu.findItem(R.id.menu_wakelock);
+            menuPortItem.setChecked(wakeLock.isHeld());
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        final EditText editText = new EditText(this);
-        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).setTitle("Enter port to be used").setView(editText)
-                .setPositiveButton("Set", null).setNeutralButton("Default", null).setNegativeButton("Cancel", null).create();
-        alertDialog.show();
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String str = editText.getText().toString();
-                if(TextUtils.isEmpty(str)) {
-                    editText.setError("* Required");
-                    return;
+        if(item.getItemId() == R.id.menu_port) {
+            final EditText editText = new EditText(this);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            final AlertDialog alertDialog = new AlertDialog.Builder(this).setTitle("Enter port to be used").setView(editText)
+                    .setPositiveButton("Set", null).setNeutralButton("Default", null).setNegativeButton("Cancel", null).create();
+            alertDialog.show();
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String str = editText.getText().toString();
+                    if(TextUtils.isEmpty(str)) {
+                        editText.setError("* Required");
+                        return;
+                    }
+                    int port = 0;
+                    try {
+                        port = Integer.parseInt(str);
+                    }
+                    catch(NumberFormatException ignored) {}
+                    if(port>0 && port<65536) {
+                        if(setProperty(port)) {
+                            getPreferences(0).edit().putInt("port", port).apply();
+                            PORT = port;
+                            menuPortItem.setTitle(PORT + "");
+                            refresh(null);
+                        }
+                        alertDialog.dismiss();
+                    }
+                    else {
+                        editText.setError("* Invalid port number");
+                    }
                 }
-                int port = 0;
-                try {
-                    port = Integer.parseInt(str);
-                }
-                catch(NumberFormatException ignored) {}
-                if(port>0 && port<65536) {
-                    if(setProperty(port)) {
-                        getPreferences(0).edit().putInt("port", port).apply();
-                        PORT = port;
-                        menuPortItem.setTitle(PORT + "");
+            });
+            alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(setProperty(5555)) {
+                        getPreferences(0).edit().putInt("port", 5555).apply();
+                        PORT = 5555;
+                        menuPortItem.setTitle("5555");
                         refresh(null);
                     }
                     alertDialog.dismiss();
                 }
-                else {
-                    editText.setError("* Invalid port number");
+            });
+        }
+        else {
+            if(item.isChecked()) {
+                if(wakeLock != null && wakeLock.isHeld()) {
+                    wakeLock.release();
                 }
+                item.setChecked(false);
             }
-        });
-        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(setProperty(5555)) {
-                    getPreferences(0).edit().putInt("port", 5555).apply();
-                    PORT = 5555;
-                    menuPortItem.setTitle("5555");
-                    refresh(null);
-                }
-                alertDialog.dismiss();
+            else {
+                item.setChecked(acquireWakeLock(3600));
             }
-        });
-        return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     public void refresh(View v) {
@@ -143,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public void refreshIp() {
         int ip = wifiManager.getConnectionInfo().getIpAddress();
         if(ip==0) {
@@ -167,6 +190,26 @@ public class MainActivity extends AppCompatActivity {
 //        }
         setProperty(-1);
         refresh(null);
+    }
+
+    @SuppressLint("WakelockTimeout")
+    public boolean acquireWakeLock(long timeout) {
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        if (powerManager != null) {
+            wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Wireless-ADB:WakeLock");
+            if(timeout < 1) {
+                wakeLock.acquire();
+            }
+            else {
+                wakeLock.acquire(timeout);
+            }
+            return wakeLock.isHeld();
+        }
+        return false;
+    }
+
+    public boolean acquireWakeLock() {
+        return acquireWakeLock(-1);
     }
 
     boolean setProperty(int port) {
