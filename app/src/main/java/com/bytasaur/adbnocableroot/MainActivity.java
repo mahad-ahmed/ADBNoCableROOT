@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         menuPortItem = menu.getItem(0);
         menuPortItem.setTitle(PORT+"");
-        Toast.makeText(this, (wakeLock == null)+"", Toast.LENGTH_SHORT).show();
         if(wakeLock != null) {
             menuPortItem = menu.findItem(R.id.menu_wakelock);
             menuPortItem.setChecked(wakeLock.isHeld());
