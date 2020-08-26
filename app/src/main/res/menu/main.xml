@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="[PORT]" android:enabled="false" />
-    <item android:title="Set Preferred Port" />
+    <item android:id="@+id/menu_port" android:title="Set Preferred Port" />
+    <!--<item android:title="Keep Screen On(1hr)" />-->
+    <item android:id="@+id/menu_wakelock" android:title="Keep Screen On(1hr)" android:checkable="true" />
 </menu>
