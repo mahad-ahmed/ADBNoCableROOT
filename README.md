@@ -1,6 +1,8 @@
 # ADB No Cable [ROOT]
 ## Allows you to debug over Wi-Fi without ever connecting a USB cable.
 
+Get from Play Store: https://play.google.com/store/apps/details?id=com.bytasaur.adbnocableroot
+
 I've tried to keep it minimal but useful.
 - There's separate buttons for enabling and disabling ADB over Wi-Fi.
 - A status display with a refresh button.
